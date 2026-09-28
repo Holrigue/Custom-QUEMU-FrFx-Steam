@@ -1,0 +1,8 @@
+runtime/
+downloads/
+iso/
+vm/
+logs/
+*.iso
+__pycache__/
+*.pyc

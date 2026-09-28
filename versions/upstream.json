@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "firefox": {
+    "channel": "stable",
+    "version": "156.0.1",
+    "source": "https://product-details.mozilla.org/1.0/firefox_versions.json"
+  },
+  "steam_client_linux": {
+    "channel": "stable",
+    "build": "1788652215",
+    "source": "https://client-update.akamai.steamstatic.com/steam_client_ubuntu12"
+  },
+  "steam_launcher_linux": {
+    "version": "1:1.0.0.87",
+    "sha256": "765aba9a0ed339a50226ceb614fcc9879a991ba184098bc8de920efb12c714a4",
+    "source": "https://repo.steampowered.com/steam/dists/stable/steam/binary-amd64/Packages",
+    "download": "https://repo.steampowered.com/steam/pool/steam/s/steam/steam-launcher_1.0.0.87_amd64.deb"
+  },
+  "compatibility": "not_tested_by_this_scan"
+}

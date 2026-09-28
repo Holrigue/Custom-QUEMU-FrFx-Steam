@@ -1,0 +1,8 @@
+{
+  "memoryMiB": 4096,
+  "cpus": 4,
+  "diskGiB": 10,
+  "profile": "auto",
+  "mouseMode": "relative",
+  "iso": "xubuntu-24.04.5-minimal-amd64.iso"
+}
