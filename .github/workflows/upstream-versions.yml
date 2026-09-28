@@ -46,7 +46,9 @@ jobs:
           fi
           git push origin "HEAD:refs/heads/$branch"
           if [ "$(gh pr list --head "$branch" --base "$DEFAULT_BRANCH" --state open --json number --jq length)" -eq 0 ]; then
-            gh pr create --head "$branch" --base "$DEFAULT_BRANCH" \
+            if ! gh pr create --head "$branch" --base "$DEFAULT_BRANCH" \
               --title 'Versions officielles Firefox et Steam' \
-              --body 'Metadonnees relevees dans les sources officielles. Aucun binaire ni disque de VM modifie. La compatibilite du prototype doit etre testee avant validation.'
+              --body 'Metadonnees relevees dans les sources officielles. Aucun binaire ni disque de VM modifie. La compatibilite du prototype doit etre testee avant validation.'; then
+              echo '::warning::Branche actualisee, mais PR non creee. Verifier les permissions Actions et ouvrir la PR manuellement si necessaire.'
+            fi
           fi
