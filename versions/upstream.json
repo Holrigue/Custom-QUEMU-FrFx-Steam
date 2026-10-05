@@ -2,7 +2,7 @@
   "schema": 1,
   "firefox": {
     "channel": "stable",
-    "version": "156.0.1",
+    "version": "157.0",
     "source": "https://product-details.mozilla.org/1.0/firefox_versions.json"
   },
   "steam_client_linux": {
