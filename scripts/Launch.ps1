@@ -101,9 +101,13 @@ try {
         $arguments = @('-name','Steam USB','-machine',$machine,'-accel',$accel,'-cpu','max',
             '-m',"$($cfg.memoryMiB)",'-smp',"$($cfg.cpus)",
             '-netdev','user,id=net0','-device','virtio-net-pci,netdev=net0',
-            '-vga','std','-display',$display,
+            '-display',$display,
             '-audiodev','dsound,id=audio0','-device','intel-hda','-device','hda-duplex,audiodev=audio0',
             '-device','qemu-xhci','-nic','none')
+        # VGA : en mode jeu, EDID force 1920x1080 comme mode prefere -> le guest rend nativement en 1080p,
+        # donc plein ecran 1:1 net (pas d'upscaling du 1280x800) et coordonnees souris correctes. Sinon std par defaut.
+        if ($Gaming) { $arguments += @('-device','VGA,edid=on,xres=1920,yres=1080') }
+        else { $arguments += @('-vga','std') }
         $pointer = if ($mouseMode -eq 'relative') { 'usb-mouse' } else { 'usb-tablet' }
         $arguments += @('-device',$pointer)
         if ($Gaming) {

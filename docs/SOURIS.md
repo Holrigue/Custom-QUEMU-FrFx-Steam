@@ -34,4 +34,10 @@ Résultat rapporté par l'utilisateur : fuite latérale **réglée**, caméra co
 
 Reste à ajuster si la caméra semble encore trop rapide : désactiver « Améliorer la précision du pointeur » côté Windows (accélération empilée) et baisser la sensibilité en jeu.
 
+### Netteté en plein écran (résolution)
+
+En mode jeu, le VGA expose un EDID forçant **1920×1080** comme mode préféré (`-device VGA,edid=on,xres=1920,yres=1080`), pour qu'un guest neuf démarre directement en 1080p : plein écran **1:1, net**, sans l'upscaling flou d'un 1280×800 étiré. Essai avec `-vga virtio` écarté : il n'a pas réglé la netteté (Xfce ne réapplique pas le redimensionnement) et provoquait un **blocage du curseur dans le coin** (décalage de coordonnées). `std` + EDID est plus fiable.
+
+Limite : un guest qui a **déjà mémorisé** une résolution plus basse (ex. 1280×800 d'une première session) la conserve malgré l'EDID. Correctif une seule fois, persistant : **Settings → Display → 1920×1080 → Apply**. Adapter la valeur si le moniteur n'est pas 1080p.
+
 Sources : https://www.qemu.org/docs/master/system/devices/usb.html et https://www.qemu.org/docs/master/system/keys.html .
