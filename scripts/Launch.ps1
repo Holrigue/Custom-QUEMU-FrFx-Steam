@@ -32,6 +32,10 @@ try {
     $psi.RedirectStandardError = $true
     $whpx = $false
     if ($Profile -ne 'tcg') {
+        # Le StreamWriter de stdin herite de Console.InputEncoding; en UTF-8 avec BOM il prefixe un BOM que QMP rejette
+        # ("stray �"), faisant echouer a tort la detection WHPX. On force un encodage sans BOM autour de la sonde.
+        $prevInEnc = $null
+        try { $prevInEnc = [Console]::InputEncoding; [Console]::InputEncoding = New-Object Text.UTF8Encoding($false) } catch {}
         $probe = New-Object Diagnostics.Process
         $probe.StartInfo = $psi
         [void]$probe.Start()
@@ -61,6 +65,7 @@ try {
         $whpx = ($probe.ExitCode -eq 0 -and $probeOk)
         $probeText | Set-Content $log
         $probe.Dispose()
+        if ($prevInEnc) { try { [Console]::InputEncoding = $prevInEnc } catch {} }
         if (!$whpx -and $Profile -eq 'whpx') { throw "WHPX indisponible. Virtualisation UEFI, Windows Hypervisor Platform et redemarrage a verifier manuellement. Journal: $log" }
     }
     $selected = if ($Profile -eq 'tcg' -or !$whpx) { 'tcg' } else { 'whpx' }
