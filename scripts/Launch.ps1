@@ -2,6 +2,7 @@ param(
     [ValidateSet('auto','whpx','tcg')][string]$Profile,
     [switch]$Install,
     [switch]$Live,
+    [switch]$Gaming,
     [switch]$CheckOnly
 )
 $ErrorActionPreference = 'Stop'
@@ -9,9 +10,12 @@ $root = Split-Path $PSScriptRoot -Parent
 $lock = $null
 try {
     if ($Install -and $Live) { throw 'Choisir Install OU Live.' }
+    if ($Gaming -and ($Install -or $Live)) { throw 'Le mode jeu ne s applique qu au demarrage normal (pas Install/Live).' }
     $cfg = Get-Content (Join-Path $root 'config\settings.json') -Raw | ConvertFrom-Json
     $mouseMode = if ($cfg.mouseMode) { $cfg.mouseMode } else { 'absolute' }
     if ($mouseMode -notin @('relative','absolute')) { throw 'mouseMode doit etre relative ou absolute.' }
+    # Mode jeu: souris relative obligatoire (deltas propres pour la camera FPS), quelle que soit la config.
+    if ($Gaming) { $mouseMode = 'relative' }
     if (!$Profile) { $Profile = $cfg.profile }
     if ($Profile -notin @('auto','whpx','tcg')) { throw 'Profil invalide.' }
     if ($env:PROCESSOR_ARCHITECTURE -ne 'AMD64') { throw 'Ce prototype exige Windows x64 Intel/AMD.' }
@@ -91,15 +95,23 @@ try {
         }
         $accel = if ($selected -eq 'tcg') { 'tcg,thread=multi' } else { 'whpx' }
         $machine = if ($selected -eq 'whpx') { 'q35,kernel-irqchip=off' } else { 'q35' }
+        # Mode jeu: backend SDL (pointer-lock natif Windows) qui confine la souris de facon fiable, y compris en
+        # multi-ecrans, la ou GTK laisse le curseur fuir vers l autre moniteur. Sinon GTK pour l usage bureau.
+        $display = if ($Gaming) { 'sdl,gl=off' } else { 'gtk,gl=off' }
         $arguments = @('-name','Steam USB','-machine',$machine,'-accel',$accel,'-cpu','max',
             '-m',"$($cfg.memoryMiB)",'-smp',"$($cfg.cpus)",
             '-netdev','user,id=net0','-device','virtio-net-pci,netdev=net0',
-            '-vga','std','-display','gtk,gl=off',
+            '-vga','std','-display',$display,
             '-audiodev','dsound,id=audio0','-device','intel-hda','-device','hda-duplex,audiodev=audio0',
             '-device','qemu-xhci','-nic','none')
         $pointer = if ($mouseMode -eq 'relative') { 'usb-mouse' } else { 'usb-tablet' }
         $arguments += @('-device',$pointer)
-        Write-Host "Souris: $mouseMode. Ctrl+Alt+G capture/libere les entrees dans QEMU GTK."
+        if ($Gaming) {
+            $arguments += '-full-screen'
+            Write-Host 'Mode jeu: SDL plein ecran, souris relative verrouillee. Ctrl+Alt+G libere la souris; Ctrl+Alt+F quitte le plein ecran.'
+        } else {
+            Write-Host "Souris: $mouseMode. Ctrl+Alt+G capture/libere les entrees dans QEMU GTK."
+        }
         if (!$Live) { $arguments += @('-drive',"file=$disk,format=vmdk,if=virtio,cache=writeback") }
         if ($Install -or $Live) {
             if ([IO.Path]::GetFileName($cfg.iso) -ne $cfg.iso) { throw 'Nom ISO invalide.' }
@@ -108,7 +120,7 @@ try {
             $arguments += @('-cdrom',$iso,'-boot','order=d,menu=on')
         } else { $arguments += @('-boot','order=c') }
         Write-Host 'Arreter depuis le menu Linux. Ne pas fermer brutalement QEMU ni retirer la cle.'
-        "Start=$(Get-Date -Format o) Profile=$selected Mouse=$mouseMode" | Add-Content $log
+        "Start=$(Get-Date -Format o) Profile=$selected Mouse=$mouseMode Gaming=$($Gaming.IsPresent) Display=$display" | Add-Content $log
         # Capture native stderr directly: PowerShell 5 must not turn QEMU warnings into terminating errors.
         $runInfo = New-Object Diagnostics.ProcessStartInfo
         $runInfo.FileName = $qemu
