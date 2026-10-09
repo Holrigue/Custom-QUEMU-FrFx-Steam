@@ -3,6 +3,7 @@ param(
     [switch]$Install,
     [switch]$Live,
     [switch]$Gaming,
+    [switch]$Control,
     [switch]$CheckOnly
 )
 $ErrorActionPreference = 'Stop'
@@ -108,6 +109,9 @@ try {
         # donc plein ecran 1:1 net (pas d'upscaling du 1280x800) et coordonnees souris correctes. Sinon std par defaut.
         if ($Gaming) { $arguments += @('-device','VGA,edid=on,xres=1920,yres=1080') }
         else { $arguments += @('-vga','std') }
+        # Canal de controle local (loopback 127.0.0.1 uniquement) pour l'outil "Coller dans la VM" (Paste-ToVM.ps1).
+        # Pas d'exposition reseau, pas d'admin, pas d'installation. N'est ouvert que si -Control est passe.
+        if ($Control) { $arguments += @('-qmp','tcp:127.0.0.1:4455,server,nowait') }
         $pointer = if ($mouseMode -eq 'relative') { 'usb-mouse' } else { 'usb-tablet' }
         $arguments += @('-device',$pointer)
         if ($Gaming) {
