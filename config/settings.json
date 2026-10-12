@@ -1,6 +1,6 @@
 {
   "memoryMiB": 4096,
-  "cpus": 4,
+  "cpus": 8,
   "diskGiB": 10,
   "profile": "auto",
   "mouseMode": "relative",
