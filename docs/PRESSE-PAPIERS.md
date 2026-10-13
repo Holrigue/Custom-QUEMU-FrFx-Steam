@@ -12,10 +12,10 @@ Un vrai presse-papiers bidirectionnel **n'est pas disponible** avec ce build QEM
 ### Sécurité (environnement de travail)
 - Le canal est un socket **`127.0.0.1` (loopback uniquement)**, jamais exposé au réseau.
 - **Aucune installation, aucun droit admin, aucune modification système, aucun pare-feu** : juste deux processus de l'utilisateur (QEMU + un script) qui communiquent en local.
-- Ouvert seulement si on lance via `Jouer-Presse-papiers.cmd` (option `-Control`).
+- Ouvert par les lanceurs **`Jouer.cmd`** et **`Jouer-Jeu.cmd`** (option `-Control`), loopback uniquement.
 
 ### Utilisation
-1. Lancer la VM avec **`Jouer-Presse-papiers.cmd`** (mode bureau GTK + canal de contrôle local).
+1. Lancer la VM : **`Jouer.cmd`** (bureau, recommandé pour coller) ou `Jouer-Jeu.cmd` (jeu). Le canal de contrôle local est actif dans les deux.
 2. Dans Windows, **copier** le texte voulu (Ctrl+C).
 3. Dans la VM, **cliquer dans le champ cible** (terminal, barre d'adresse…) pour qu'il ait le focus.
 4. Lancer **`Coller-dans-VM.cmd`** : le texte est tapé dans la VM.
@@ -28,4 +28,4 @@ La frappe suppose la disposition **US** dans la VM (mapping caractère → touch
 ### Limites
 - **Sens unique** : pas de copie VM → Windows par ce biais.
 - Caractères **non-ASCII** (accents é à …) ignorés — rares dans des commandes/URLs.
-- En **mode jeu** (`Jouer-Jeu.cmd`, SDL), le canal n'est pas ouvert : le collage est un besoin bureau, pas jeu.
+- Le canal est ouvert aussi en **mode jeu** (`Jouer-Jeu.cmd`), mais coller est surtout un besoin bureau : en SDL plein écran il n'y a pas de champ pratique où coller. Utiliser `Jouer.cmd` pour le presse-papiers.

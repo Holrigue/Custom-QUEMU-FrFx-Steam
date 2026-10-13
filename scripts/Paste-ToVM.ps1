@@ -35,7 +35,7 @@ $map[[char]'&']  = @('shift','7');     $map[[char]'*'] = @('shift','8')
 $map[[char]'(']  = @('shift','9');     $map[[char]')'] = @('shift','0')
 
 $c = New-Object Net.Sockets.TcpClient
-try { $c.Connect('127.0.0.1', $Port) } catch { Write-Host "Canal de controle injoignable sur 127.0.0.1:$Port. La VM tourne-t-elle via Jouer-Presse-papiers.cmd ?"; exit 1 }
+try { $c.Connect('127.0.0.1', $Port) } catch { Write-Host "Canal de controle injoignable sur 127.0.0.1:$Port. La VM tourne-t-elle (Jouer.cmd / Jouer-Jeu.cmd) ?"; exit 1 }
 $s = $c.GetStream(); $r = New-Object IO.StreamReader($s); $w = New-Object IO.StreamWriter($s); $w.NewLine = "`n"; $w.AutoFlush = $true
 Start-Sleep -Milliseconds 300; [void]$r.ReadLine(); $w.WriteLine('{"execute":"qmp_capabilities"}'); Start-Sleep -Milliseconds 200; [void]$r.ReadLine()
 
