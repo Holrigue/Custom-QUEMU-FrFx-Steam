@@ -180,10 +180,15 @@ SNES, Game Boy / GBC / GBA, Genesis / Mega Drive / Master System, and
 PlayStation 1. Heavier systems (N64, PSP, PS2, GameCube...) are left out on
 purpose: software rendering has no GPU to drive them.
 
+It is set up for newcomers: a simple "kiosk" menu (no technical options) and one
+game list per system, each game launching in a single click.
+
 This ships the PLAYER only: no games and no BIOS files (those are copyrighted).
 Add your own, legally, from INSIDE the VM (e.g. download them with Firefox) into
-~/Games/roms ; a PlayStation BIOS you own goes in ~/Games/bios . The Windows
-stick is not visible from inside the VM, so games are added from Linux.
+the matching sub-folder of ~/Games/roms (nes, snes, gb, gbc, gba, genesis, sms,
+psx); a PlayStation BIOS you own goes in ~/Games/bios . The Windows stick is not
+visible from inside the VM, so games are added from Linux. After adding games,
+run "bash make-playlists.sh" to build the lists.
 
 Open it from the "RetroArch (emulators)" desktop icon, or the Games menu. Full
 notes: system/docs/EMULATION.md.

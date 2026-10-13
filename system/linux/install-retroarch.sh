@@ -71,16 +71,20 @@ savefile_directory = "$HOME/Games/saves"
 savestate_directory = "$HOME/Games/states"
 system_directory = "$HOME/Games/bios"
 core_updater_buildbot_cores_url = "$bb/"
-menu_show_online_updater = "true"
 EOF
 
 # 5. A note in the ROMs folder (how to add games + the legal boundary).
 cat > "$HOME/Games/roms/READ-ME-FIRST.txt" <<'EOF'
-Put your own, legally-obtained game files (ROMs) in this folder.
+Put your own, legally-obtained game files (ROMs) in the matching sub-folder:
+  nes/  snes/  gb/  gbc/  gba/  genesis/  sms/  psx/
 This kit ships the RetroArch player only - no games and no BIOS files.
 
 Add games from INSIDE this Linux VM (e.g. download them with Firefox),
 because the Windows USB stick is not directly visible from inside the VM.
+
+After adding games, build the game lists by running:
+  bash make-playlists.sh
+(each game then launches in one click from its system's list).
 
 Some systems (e.g. PlayStation 1) also need a BIOS file you legally own:
 put it in ~/Games/bios . Then open RetroArch -> Load Content.
@@ -99,9 +103,16 @@ Categories=Game;
 EOF
 chmod +x "$HOME/Desktop/RetroArch.desktop" || true
 
+# 7. Newcomer-friendly setup: simple "kiosk" menu, per-system folders, game lists.
+here="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$here/make-playlists.sh" ]; then
+    bash "$here/make-playlists.sh" || true
+fi
+
 echo
 echo 'RetroArch installed and pre-configured for this VM:'
 echo ' - Light cores ready: NES, SNES, GB/GBC, GBA, Genesis/MD/SMS, PlayStation 1.'
 echo ' - Heavy systems (N64, PSP, PS2, GameCube...) are NOT set up: no GPU in the VM.'
-echo ' - Add your own ROMs in ~/Games/roms and BIOS in ~/Games/bios.'
+echo ' - Simple menu (kiosk) + one game list per system.'
+echo ' - Add your ROMs in ~/Games/roms/<system>/ then run: bash make-playlists.sh'
 echo 'Open it from the "RetroArch (emulators)" Desktop icon or the Games menu.'

@@ -38,6 +38,22 @@ Written to `~/.config/retroarch/retroarch.cfg` before first launch:
 - `video_fullscreen = "true"` — launches fullscreen (toggle with **F**).
 - Paths point at `~/Games`: `roms`, `saves`, `states`, `bios`.
 
+## Simple menu and game lists (for newcomers)
+
+`linux/make-playlists.sh` turns RetroArch into a one-click experience:
+
+- **Kiosk menu** (`kiosk_mode_enable`): the technical options are hidden, so a
+  new user cannot break the setup. To unlock it, set
+  `kiosk_mode_enable = "false"` in `~/.config/retroarch/retroarch.cfg`.
+- **One list per system**, each game launching with the right core in a single
+  click (no core picking).
+
+Run it once after adding games (it is safe to re-run any time):
+
+    bash make-playlists.sh
+
+It also runs automatically at the end of the install.
+
 ## Adding games (ROMs)
 
 The Windows USB stick is **not mounted inside the VM** (the VM's storage is the
@@ -45,8 +61,10 @@ virtual disk `vm/linux.vmdk`). So games are added **from inside Linux**:
 
 1. In the VM, download your legally-owned ROM with **Firefox**, or copy it in by
    any means available inside Linux.
-2. Put the file in `~/Games/roms` (subfolders per system are fine).
-3. RetroArch → **Load Content** → `~/Games/roms`, pick the file, pick the core.
+2. Put the file in the matching sub-folder of `~/Games/roms`:
+   `nes/ snes/ gb/ gbc/ gba/ genesis/ sms/ psx/`
+3. Run `bash make-playlists.sh`, then open RetroArch: the game is in its list.
+   (You can still use **Load Content** to browse manually.)
 
 Mind the disk: the virtual disk is about **10 GiB**, shared with the OS and
 Steam. Small cartridge ROMs are nothing; a few PS1 discs add up fast. Check free
