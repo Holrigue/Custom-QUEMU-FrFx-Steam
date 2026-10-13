@@ -1,17 +1,18 @@
-# "Coller dans la VM" : lit le presse-papiers Windows et le TAPE dans la fenetre active de la VM,
-# via le canal de controle local QMP (127.0.0.1). Sens unique Windows -> VM (contournement du presse-papiers
-# non supporte par ce build QEMU-Windows). La VM doit tourner avec le canal de controle (Jouer-Presse-papiers.cmd).
+# "Paste into the VM": reads the Windows clipboard and TYPES it into the active VM window,
+# through the local QMP control channel (127.0.0.1). One-way Windows -> VM (a workaround for the clipboard
+# that this QEMU-Windows build does not support). The VM must be running with the control channel open
+# (started from "Steam Remote Play.cmd").
 #
-# IMPORTANT : la frappe suppose la disposition clavier US dans la VM (mapping caractere -> touche US).
-# Avant de coller, clique dans le champ cible de la VM (terminal, barre d'adresse, etc.).
+# IMPORTANT: typing assumes a US keyboard layout in the VM (character -> US key mapping).
+# Before pasting, click the target field in the VM (terminal, address bar, etc.).
 param([int]$Port = 4455, [int]$DelayMs = 55)
 $ErrorActionPreference = 'Stop'
 
 Add-Type -AssemblyName System.Windows.Forms
 $text = [System.Windows.Forms.Clipboard]::GetText()
-if ([string]::IsNullOrEmpty($text)) { Write-Host 'Presse-papiers vide (texte). Rien a coller.'; exit 0 }
+if ([string]::IsNullOrEmpty($text)) { Write-Host 'Clipboard is empty (text). Nothing to paste.'; exit 0 }
 
-# Table caractere -> sequence de qcodes (disposition US).
+# Character -> qcode sequence table (US layout).
 $map = New-Object 'System.Collections.Generic.Dictionary[char,string[]]'
 foreach ($i in 97..122) { $map[[char]$i] = @([string][char]$i) }                 # a-z
 foreach ($i in 65..90)  { $map[[char]$i] = @('shift', [string][char]($i + 32)) } # A-Z
@@ -35,7 +36,7 @@ $map[[char]'&']  = @('shift','7');     $map[[char]'*'] = @('shift','8')
 $map[[char]'(']  = @('shift','9');     $map[[char]')'] = @('shift','0')
 
 $c = New-Object Net.Sockets.TcpClient
-try { $c.Connect('127.0.0.1', $Port) } catch { Write-Host "Canal de controle injoignable sur 127.0.0.1:$Port. La VM tourne-t-elle (Jouer.cmd / Jouer-Jeu.cmd) ?"; exit 1 }
+try { $c.Connect('127.0.0.1', $Port) } catch { Write-Host "Control channel unreachable on 127.0.0.1:$Port. Is the VM running (started from Steam Remote Play.cmd)?"; exit 1 }
 $s = $c.GetStream(); $r = New-Object IO.StreamReader($s); $w = New-Object IO.StreamWriter($s); $w.NewLine = "`n"; $w.AutoFlush = $true
 Start-Sleep -Milliseconds 300; [void]$r.ReadLine(); $w.WriteLine('{"execute":"qmp_capabilities"}'); Start-Sleep -Milliseconds 200; [void]$r.ReadLine()
 
@@ -53,4 +54,4 @@ foreach ($ch in [char[]]$text) {
 }
 $c.Close()
 $n = ($text -replace "`r", '').Length
-Write-Host "Colle $n caractere(s) dans la VM.$(if($skipped){" $skipped non pris en charge (hors ASCII) ignore(s)."})"
+Write-Host "Pasted $n character(s) into the VM.$(if($skipped){" $skipped unsupported (non-ASCII) character(s) skipped."})"

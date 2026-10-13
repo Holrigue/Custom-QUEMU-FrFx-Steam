@@ -2,10 +2,10 @@
 # Source: https://support.mozilla.org/en-US/kb/install-firefox-linux
 set -euo pipefail
 if [ "$EUID" -eq 0 ]; then
-    echo 'Executer comme utilisateur du bureau : bash install-firefox.sh'; exit 1
+    echo 'Run as the desktop user: bash install-firefox.sh'; exit 1
 fi
 if findmnt -n -o FSTYPE / | grep -qx overlay; then
-    echo 'Session LIVE : cette installation disparaitra apres extinction.'
+    echo 'LIVE session: this install will disappear after shutdown.'
 fi
 sudo -v
 work=$(mktemp -d)
@@ -13,7 +13,7 @@ trap 'rm -rf -- "$work"' EXIT
 wget -qO "$work/mozilla.asc" https://packages.mozilla.org/apt/repo-signing-key.gpg
 fingerprint=$(gpg --batch --show-keys --with-colons "$work/mozilla.asc" | awk -F: '$1=="fpr" {print $10; exit}')
 if [ "$fingerprint" != 35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3 ]; then
-    echo 'Empreinte de signature Mozilla inattendue : arret.'; exit 1
+    echo 'Unexpected Mozilla signing fingerprint: aborting.'; exit 1
 fi
 sudo install -d -m 0755 /etc/apt/keyrings
 sudo install -m 0644 "$work/mozilla.asc" /etc/apt/keyrings/steam-usb-mozilla.asc
@@ -28,6 +28,6 @@ for mime in text/html x-scheme-handler/http x-scheme-handler/https; do
     xdg-mime default firefox.desktop "$mime"
 done
 firefox --version
-printf 'Navigateur par defaut : '
+printf 'Default web browser: '
 xdg-settings get default-web-browser
-echo 'Installation terminee. Lancer Firefox depuis le menu Internet.'
+echo 'Install complete. Launch Firefox from the Internet menu.'

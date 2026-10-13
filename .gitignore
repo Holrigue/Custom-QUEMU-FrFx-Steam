@@ -1,8 +1,8 @@
-runtime/
+system/runtime/
+system/iso/
+system/vm/
+system/logs/
 downloads/
-iso/
-vm/
-logs/
 *.iso
 __pycache__/
 *.pyc

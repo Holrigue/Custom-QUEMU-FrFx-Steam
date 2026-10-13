@@ -1,4 +1,4 @@
-name: Versions Firefox et Steam
+name: Firefox and Steam versions
 on:
   schedule:
     - cron: '23 10 * * 1'
@@ -35,11 +35,11 @@ jobs:
           else
             git switch --create "$branch"
           fi
-          python3 -m unittest discover -s tests
-          python3 scripts/scan-upstream.py
-          git add -- versions/upstream.json
+          python3 -m unittest discover -s system/tests
+          python3 system/scripts/scan-upstream.py
+          git add -- system/versions/upstream.json
           if ! git diff --cached --quiet; then
-            git commit -m 'chore: actualiser les versions officielles Firefox et Steam'
+            git commit -m 'chore: update official Firefox and Steam versions'
           fi
           if [ "$(git rev-list --count "origin/$DEFAULT_BRANCH..HEAD")" -eq 0 ]; then
             exit 0
@@ -47,8 +47,8 @@ jobs:
           git push origin "HEAD:refs/heads/$branch"
           if [ "$(gh pr list --head "$branch" --base "$DEFAULT_BRANCH" --state open --json number --jq length)" -eq 0 ]; then
             if ! gh pr create --head "$branch" --base "$DEFAULT_BRANCH" \
-              --title 'Versions officielles Firefox et Steam' \
-              --body 'Metadonnees relevees dans les sources officielles. Aucun binaire ni disque de VM modifie. La compatibilite du prototype doit etre testee avant validation.'; then
-              echo '::warning::Branche actualisee, mais PR non creee. Verifier les permissions Actions et ouvrir la PR manuellement si necessaire.'
+              --title 'Official Firefox and Steam versions' \
+              --body 'Metadata read from the official sources. No binary or VM disk changed. Prototype compatibility must be tested before merging.'; then
+              echo '::warning::Branch updated, but PR not created. Check Actions permissions and open the PR manually if needed.'
             fi
           fi
