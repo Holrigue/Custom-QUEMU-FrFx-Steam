@@ -46,9 +46,12 @@ if wget -q --tries=3 -O "$work/info.zip" 'https://buildbot.libretro.com/assets/f
 fi
 
 # 4. Pre-tuned configuration for software rendering (written before first launch).
+#    video_driver=sdl2 on purpose: the "gl" driver fails here with a GLX
+#    BadAccess (X_GLXMakeContextCurrent) because the VM has no GPU (llvmpipe).
+#    SDL2 does a pure software blit and works.
 cat > "$cfg/retroarch.cfg" <<EOF
 menu_driver = "rgui"
-video_driver = "gl"
+video_driver = "sdl2"
 video_threaded = "true"
 video_vsync = "true"
 video_max_swapchain_images = "2"

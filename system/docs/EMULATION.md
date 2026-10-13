@@ -26,9 +26,11 @@ Written to `~/.config/retroarch/retroarch.cfg` before first launch:
 
 - `menu_driver = "rgui"` — a **software-drawn** menu. The default XMB menu is
   GPU-heavy and crawls in llvmpipe; rgui is light and instant.
-- `video_driver = "gl"`, `video_threaded = "true"` — decouples emulation from the
-  video thread. If a 2D core still feels heavy, try `video_driver = "sdl2"`
-  (pure software blit).
+- `video_driver = "sdl2"` — a pure software blit. The default `gl` driver does
+  NOT work in this VM: with no GPU (llvmpipe) it fails to create a GL context
+  (`GLX BadAccess` on `X_GLXMakeContextCurrent`) and RetroArch exits instantly.
+  SDL2 avoids GL entirely.
+- `video_threaded = "true"` — decouples emulation from the video thread.
 - `video_shader_enable = "false"`, `video_smooth = "false"` — no shaders, crisp
   nearest-neighbour pixels; both save CPU.
 - `rewind_enable = "false"`, `run_ahead_enabled = "false"` — these are expensive
