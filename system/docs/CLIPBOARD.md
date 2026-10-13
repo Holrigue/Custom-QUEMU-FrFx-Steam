@@ -15,10 +15,10 @@ Without native sync, the tool **types** the Windows clipboard into the active VM
 - Opened by the **Play** and **Desktop mode** launcher options (`-Control`), loopback only.
 
 ### How to use
-1. Start the VM from **`Steam Remote Play.cmd`** (Play or Desktop mode). The local control channel is active in both.
+1. Start the VM from **`Media Center.cmd`** (Play or Desktop mode). The local control channel is active in both.
 2. In Windows, **copy** the text you want (Ctrl+C).
 3. In the VM, **click the target field** (terminal, address bar...) so it has focus.
-4. Open **`Steam Remote Play.cmd`** again and choose **Paste clipboard into the VM**: the text is typed into the VM.
+4. Open **`Media Center.cmd`** again and choose **Paste clipboard into the VM**: the text is typed into the VM.
 
 ### Keyboard requirement: US
 Typing assumes a **US** layout in the VM (character -> US key mapping). If the VM is set to CA/FR, symbols will be wrong.

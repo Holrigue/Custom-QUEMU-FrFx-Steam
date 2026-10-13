@@ -5,7 +5,7 @@ Reported symptom: the desktop feels normal, but the in-game camera is far too fa
 `config/settings.json` now uses `"mouseMode": "relative"`: QEMU exposes `usb-mouse` instead of `usb-tablet`. Do not change Windows/Linux/in-game sensitivity during the first trial, to isolate this change.
 
 1. Shut down Linux from its menu, wait for QEMU to close.
-2. Start **Play** again from `Steam Remote Play.cmd`. A plain internal Linux reboot does not change the QEMU devices.
+2. Start **Play** again from `Media Center.cmd`. A plain internal Linux reboot does not change the QEMU devices.
 3. Click inside the VM display; use **Ctrl+Alt+G** to grab input if needed (View > Grab Input).
 4. Try the same game over Remote Play and compare slow turns, fast turns, and continuous movement.
 5. **Ctrl+Alt+G** releases mouse and keyboard back to Windows.

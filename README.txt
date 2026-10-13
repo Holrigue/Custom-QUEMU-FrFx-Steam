@@ -1,5 +1,5 @@
 ===============================================================================
-  PORTABLE STEAM REMOTE PLAY  (QEMU + Linux on a USB stick)
+  USB-VM LINUX MEDIA CENTER  (QEMU + Linux on a USB stick)
 ===============================================================================
 
 Run the Linux Steam Remote Play client in a window on Windows 11, carried on an
@@ -16,7 +16,7 @@ PC. See system/docs/TESTS.md.
   HOW TO START  (the short version)
 -------------------------------------------------------------------------------
 
-Double-click:   Steam Remote Play.cmd
+Double-click:   Media Center.cmd
 
 It opens a small menu:
 
@@ -36,7 +36,7 @@ First time on a new stick: do the one-time preparation below, then choose
 -------------------------------------------------------------------------------
 
     <stick>/
-      Steam Remote Play.cmd      <- the only thing you double-click
+      Media Center.cmd           <- the only thing you double-click
       README.txt                 <- this file
       system/                    <- everything else lives here
         scripts/                 Launch.ps1, Paste-ToVM.ps1, ...
@@ -75,7 +75,7 @@ Steam session is published. See system/docs/PREINSTALL.md.
 Do NOT use Rufus: Windows launches the VM from ordinary files. No formatting
 needed.
 
-1. Extract the kit onto the stick (you get "Steam Remote Play.cmd", "README.txt"
+1. Extract the kit onto the stick (you get "Media Center.cmd", "README.txt"
    and "system/").
 2. Download "qemu-w64-setup-20260811.exe" and its ".sha512" from the Windows
    build referenced by QEMU: https://qemu.weilnetz.de/w64/
@@ -88,7 +88,7 @@ needed.
    https://cdimage.ubuntu.com/xubuntu/releases/24.04/release/
    Verify SHA256, then put the image into  system/iso/
    Tested hash: 9d47f975696ce496b8be882b6d7cc9079c1ea89fb625ac2c86caa63a4f180033
-4. Double-click "Steam Remote Play.cmd", choose [5] Hardware check, then
+4. Double-click "Media Center.cmd", choose [5] Hardware check, then
    [4] First-time setup.
 
 Xubuntu 24.04 LTS Minimal: light Xfce, Ubuntu base, and i386 Steam libraries.
@@ -128,8 +128,8 @@ scripts:
 
     mkdir -p ~/steam-usb-setup
     cd ~/steam-usb-setup
-    wget https://github.com/Holrigue/portable-steam-remote-play/releases/download/v0.1.0/SteamUSB-v0.1.0-linux.tar.gz
-    wget https://github.com/Holrigue/portable-steam-remote-play/releases/download/v0.1.0/SHA256SUMS
+    wget https://github.com/Holrigue/usb-vm-linux-media-center/releases/download/v0.1.0/SteamUSB-v0.1.0-linux.tar.gz
+    wget https://github.com/Holrigue/usb-vm-linux-media-center/releases/download/v0.1.0/SHA256SUMS
     grep 'SteamUSB-v0.1.0-linux.tar.gz' SHA256SUMS | sha256sum -c -
 
 Continue only if the check prints OK:
@@ -179,7 +179,7 @@ loopback channel (127.0.0.1 only, no network, no admin).
 1. Start the VM (Play or Desktop mode).
 2. In Windows, copy the text (Ctrl+C).
 3. In the VM, click the target field (terminal, address bar).
-4. Open "Steam Remote Play.cmd" again and choose [3] Paste clipboard into the VM.
+4. Open "Media Center.cmd" again and choose [3] Paste clipboard into the VM.
 
 Keyboard must be US inside the VM. One-way only (Windows -> VM); non-ASCII
 characters are skipped. Full details: system/docs/CLIPBOARD.md.

@@ -1,7 +1,7 @@
 # "Paste into the VM": reads the Windows clipboard and TYPES it into the active VM window,
 # through the local QMP control channel (127.0.0.1). One-way Windows -> VM (a workaround for the clipboard
 # that this QEMU-Windows build does not support). The VM must be running with the control channel open
-# (started from "Steam Remote Play.cmd").
+# (started from "Media Center.cmd").
 #
 # IMPORTANT: typing assumes a US keyboard layout in the VM (character -> US key mapping).
 # Before pasting, click the target field in the VM (terminal, address bar, etc.).
@@ -36,7 +36,7 @@ $map[[char]'&']  = @('shift','7');     $map[[char]'*'] = @('shift','8')
 $map[[char]'(']  = @('shift','9');     $map[[char]')'] = @('shift','0')
 
 $c = New-Object Net.Sockets.TcpClient
-try { $c.Connect('127.0.0.1', $Port) } catch { Write-Host "Control channel unreachable on 127.0.0.1:$Port. Is the VM running (started from Steam Remote Play.cmd)?"; exit 1 }
+try { $c.Connect('127.0.0.1', $Port) } catch { Write-Host "Control channel unreachable on 127.0.0.1:$Port. Is the VM running (started from Media Center.cmd)?"; exit 1 }
 $s = $c.GetStream(); $r = New-Object IO.StreamReader($s); $w = New-Object IO.StreamWriter($s); $w.NewLine = "`n"; $w.AutoFlush = $true
 Start-Sleep -Milliseconds 300; [void]$r.ReadLine(); $w.WriteLine('{"execute":"qmp_capabilities"}'); Start-Sleep -Milliseconds 200; [void]$r.ReadLine()
 

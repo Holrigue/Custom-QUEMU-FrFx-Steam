@@ -89,7 +89,7 @@ try {
     try {
         $disk = 'vm/linux.vmdk'
         if (!$Live -and !(Test-Path $disk)) {
-            if (!$Install) { throw 'Linux is not installed yet: open "Steam Remote Play.cmd" and choose First-time setup.' }
+            if (!$Install) { throw 'Linux is not installed yet: open "Media Center.cmd" and choose First-time setup.' }
             if ($cfg.diskGiB -lt 8 -or $cfg.diskGiB -gt 128) { throw 'Invalid disk size.' }
             & (Join-Path $root 'runtime\qemu\qemu-img.exe') create -f vmdk -o subformat=twoGbMaxExtentSparse $disk "$($cfg.diskGiB)G"
             if ($LASTEXITCODE) { throw 'Could not create the disk.' }

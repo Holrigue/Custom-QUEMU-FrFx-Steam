@@ -1,12 +1,12 @@
 @echo off
 setlocal
-title Steam Remote Play (portable)
+title USB-VM Linux Media Center (portable)
 set "PS=%~dp0system\scripts"
 
 :menu
 cls
 echo ==================================================
-echo    STEAM REMOTE PLAY  -  portable QEMU kit
+echo    USB-VM LINUX MEDIA CENTER  -  portable QEMU kit
 echo ==================================================
 echo.
 echo    [1]  Play             (fullscreen, for Remote Play)

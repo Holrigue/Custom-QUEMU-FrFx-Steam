@@ -4,7 +4,7 @@ if [ "$EUID" -eq 0 ]; then
     echo 'Run with "bash prepare-persistent.sh", without sudo in front.'; exit 1
 fi
 if findmnt -n -o FSTYPE / | grep -qx overlay; then
-    echo 'STOP: live session. Install Linux onto the virtual disk first, then use Play from Steam Remote Play.cmd.'; exit 1
+    echo 'STOP: live session. Install Linux onto the virtual disk first, then use Play from Media Center.cmd.'; exit 1
 fi
 base=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 sudo -v
@@ -18,4 +18,4 @@ bash "$base/install-firefox.sh"
 bash "$base/install-steam.sh"
 mkdir -p "$HOME/.local/share/steam-usb"
 date -Iseconds > "$HOME/.local/share/steam-usb/prepared-at"
-echo 'Setup complete. Shut down Linux, choose Play again from Steam Remote Play.cmd, and check Firefox and Steam.'
+echo 'Setup complete. Shut down Linux, choose Play again from Media Center.cmd, and check Firefox and Steam.'
