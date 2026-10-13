@@ -15,7 +15,8 @@ if [ -f /etc/locale.gen ]; then
     sudo locale-gen
 fi
 bash "$base/install-firefox.sh"
+bash "$base/install-retroarch.sh"
 bash "$base/install-steam.sh"
 mkdir -p "$HOME/.local/share/steam-usb"
 date -Iseconds > "$HOME/.local/share/steam-usb/prepared-at"
-echo 'Setup complete. Shut down Linux, choose Play again from Media Center.cmd, and check Firefox and Steam.'
+echo 'Setup complete. Shut down Linux, choose Play again from Media Center.cmd, and check Firefox, Steam and RetroArch.'
