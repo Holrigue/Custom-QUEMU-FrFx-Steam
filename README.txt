@@ -4,8 +4,9 @@
 
 Run the Linux Steam Remote Play client in a window on Windows 11, carried on an
 ordinary USB stick. Your gaming PC at home runs the games; the local PC runs
-QEMU, Linux, and the stream decoding. Nothing is installed on the host and
-everything persists on the stick.
+QEMU, Linux, and the stream decoding. It also carries RetroArch for local retro
+gaming (8/16-bit consoles and PlayStation 1). Nothing is installed on the host
+and everything persists on the stick.
 
 v0.1.0 - experimental prototype. A first Remote Play run was reported as very
 smooth by the user. That is not a guarantee of FPS or compatibility on every
@@ -41,7 +42,7 @@ First time on a new stick: do the one-time preparation below, then choose
       system/                    <- everything else lives here
         scripts/                 Launch.ps1, Paste-ToVM.ps1, ...
         config/settings.json     RAM, vCPU, profile, mouse mode
-        linux/                   Firefox and Steam install scripts
+        linux/                   Firefox, Steam and RetroArch install scripts
         docs/                    extra notes (SETUP, CLIPBOARD, MOUSE, ...)
         runtime/qemu/            <- you add QEMU here (not shipped)
         iso/                     <- you add the Linux ISO here (not shipped)
@@ -49,7 +50,7 @@ First time on a new stick: do the one-time preparation below, then choose
         logs/                    local logs
 
 This release is a kit of scripts and docs. It does NOT contain QEMU, the ISO, a
-preinstalled Linux disk, or the Firefox/Steam binaries. The preparation below
+preinstalled Linux disk, or the Firefox/Steam/RetroArch binaries. The preparation below
 installs them once; apps and settings persist afterward. No personal VM or
 Steam session is published. See system/docs/PREINSTALL.md.
 
@@ -120,7 +121,7 @@ cloud-synced folder.
 
 
 -------------------------------------------------------------------------------
-  3. INSTALL FIREFOX AND STEAM
+  3. INSTALL FIREFOX, STEAM AND RETROARCH
 -------------------------------------------------------------------------------
 
 In the terminal of the INSTALLED Linux (no browser needed), download the
@@ -139,13 +140,14 @@ Continue only if the check prints OK:
 
 The script refuses a live session, asks for sudo, prepares the fr_CA/en_US
 locales, installs Firefox from the Mozilla repo with a key-fingerprint check,
-enables i386/multiverse, and installs Steam with its dependencies. It sets
+enables i386/multiverse, and installs Steam with its dependencies. It also
+installs RetroArch, pre-tuned for this VM (see "Retro gaming" below). It sets
 Firefox as the default browser and Steam to start with the Linux session. Steam
 downloads its update at first launch; sign in and enter Steam Guard only inside
 Steam.
 
-The three linux/ scripts can also be copied into the VM together. The
-Windows/Linux clipboard sync is not configured (see the paste tool below).
+The linux/ scripts can also be copied into the VM together. The Windows/Linux
+clipboard sync is not configured (see the paste tool below).
 
 
 -------------------------------------------------------------------------------
@@ -166,6 +168,25 @@ windowed GTK, handier for setup and browsing. See system/docs/MOUSE.md.
 
 To remove the stick: shut Linux down, wait for QEMU to close, then eject in
 Windows. There is NO protection against yanking it out.
+
+
+-------------------------------------------------------------------------------
+  RETRO GAMING  (RETROARCH)
+-------------------------------------------------------------------------------
+
+The setup also installs RetroArch, pre-configured for this no-GPU VM: a light
+software menu (rgui), fullscreen, and no shaders. Ready-to-use cores cover NES,
+SNES, Game Boy / GBC / GBA, Genesis / Mega Drive / Master System, and
+PlayStation 1. Heavier systems (N64, PSP, PS2, GameCube...) are left out on
+purpose: software rendering has no GPU to drive them.
+
+This ships the PLAYER only: no games and no BIOS files (those are copyrighted).
+Add your own, legally, from INSIDE the VM (e.g. download them with Firefox) into
+~/Games/roms ; a PlayStation BIOS you own goes in ~/Games/bios . The Windows
+stick is not visible from inside the VM, so games are added from Linux.
+
+Open it from the "RetroArch (emulators)" desktop icon, or the Games menu. Full
+notes: system/docs/EMULATION.md.
 
 
 -------------------------------------------------------------------------------
@@ -199,7 +220,10 @@ characters are skipped. Full details: system/docs/CLIPBOARD.md.
   shutdown, then [1] Play without the ISO. Ctrl+Alt+2 opens the QEMU monitor;
   "system_powerdown" requests a clean stop. "quit" is a last resort (not clean).
   Ctrl+Alt+1 returns to the display.
-- Gamepad: automatic pass-through from Windows is not implemented or validated.
+- Gamepad: automatic pass-through from Windows is not implemented or validated;
+  RetroArch is playable on the keyboard meanwhile.
+- RetroArch ROMs: add them from inside the VM (the Windows stick is not mounted
+  there); heavy systems need a real GPU. See system/docs/EMULATION.md.
 - Network: user-mode NAT without TAP; LAN discovery by broadcast may be limited.
   No inbound Windows port is opened by the scripts.
 - Launch-on-plug: not included. A plain storage stick does not auto-run.
